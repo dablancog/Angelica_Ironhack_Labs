@@ -171,23 +171,12 @@ FROM trans
 WHERE account_id = 396
 GROUP BY `type`
 ORDER BY `type`;
+#Result:
+#account_id transaction_type total_amount
+#396		INCOMING			1028138
+#396		OUTGOING			1485814
 
 #Query 20: From the previous result, modify your query so that it returns only one row, with a column for incoming amount, outgoing amount and the difference.
-SELECT account_id, 
-       CASE `type`
-           WHEN 'PRIJEM' THEN 'Incoming'
-           WHEN 'VYDAJ' THEN 'Outgoing'
-       END AS transaction_type, 
-       FLOOR(SUM(amount)) AS total_amount 
-FROM trans
-WHERE account_id = 396
-GROUP BY `type`
-ORDER BY `type`;
-# Result:
-# account_id	transaction_type	total_amount
-# 	396			INCOMING			1028138
-# 	396			OUTGOING			1485814
-
 SELECT account_id,
        SUM(CASE `type` WHEN 'PRIJEM' THEN amount ELSE 0 END) AS incoming_amount,
        SUM(CASE `type` WHEN 'VYDAJ' THEN amount ELSE 0 END) AS outgoing_amount,
@@ -195,7 +184,23 @@ SELECT account_id,
 FROM trans
 WHERE account_id = 396
 GROUP BY account_id;
-#396	1028138	1485814	-457676
+#Result:
+#accont_id incoming_amount outgoing_amount difference
+#396		1028138			1485814			-457676
+
+#Query 21: Continuing with the previous example, rank the top 10 account_ids based on their difference.
+SELECT account_id, difference
+FROM (
+    SELECT account_id,
+           SUM(CASE `type` WHEN 'PRIJEM' THEN amount ELSE 0 END) AS incoming_amount,
+           SUM(CASE `type` WHEN 'VYDAJ' THEN amount ELSE 0 END) AS outgoing_amount,
+           SUM(CASE `type` WHEN 'PRIJEM' THEN amount ELSE -amount END) AS difference
+    FROM trans
+    GROUP BY account_id
+) AS subquery
+ORDER BY difference DESC
+LIMIT 10;
+
 
 
 
