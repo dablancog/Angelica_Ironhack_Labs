@@ -51,8 +51,9 @@ LIMIT 5;
 # Result: 10954, 938, 10711, 1766, 10799
 
 # Query 8: What are the unique values of k_symbol in the order table?
-SELECT DISTINCT(k_symbol) FROM `order`;
-# Result: SIPO, UVER, POJISTNE, LEASING
+SELECT DISTINCT(k_symbol) FROM `order`
+WHERE k_symbol <> " "; # To leave out the nulls
+# Result: SIPO, UVER, , POJISTNE, LEASING
 
 # Query 9: In the order table, what are the order_ids of the client with the account_id 34?
 SELECT order_id FROM `order`
