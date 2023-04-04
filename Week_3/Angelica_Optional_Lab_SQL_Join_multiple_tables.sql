@@ -8,4 +8,8 @@ INNER JOIN city AS ct ON ct.city_id = ad.city_id
 INNER JOIN country AS co ON co.country_id = ct.country_id;
 
 #Query 2: Write a query to display how much business, in dollars, each store brought in.
-
+SELECT st.store_id, sum(pay.amount) AS revenue
+FROM store AS st
+INNER JOIN customer AS cu ON st.store_id = cu.store_id
+INNER JOIN payment AS pay ON pay.customer_id = cu.customer_id
+GROUP BY st.store_id;
