@@ -72,3 +72,10 @@ FROM address AS ad LEFT JOIN customer AS cu
 ON ad.address_id = cu.address_id
 WHERE cu.address_id IS NULL AND ad.address regexp "e$";
 
+#Optional: what is the most rented film? This query might require using more than one join statement. Give it a try.
+SELECT fi.title, count(re.rental_id) AS total_rentals
+FROM film AS fi
+INNER JOIN inventory AS inv ON fi.film_id = inv.film_id
+INNER JOIN rental AS re ON inv.inventory_id = re.inventory_id
+GROUP BY fi.title
+ORDER BY total_rentals DESC;
