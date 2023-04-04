@@ -78,5 +78,4 @@ FROM film AS fi
 INNER JOIN inventory AS inv ON fi.film_id = inv.film_id
 INNER JOIN rental AS re ON inv.inventory_id = re.inventory_id
 GROUP BY fi.title
-ORDER BY total_rentals DESC
-LIMIT 1;
+ORDER BY total_rentals DESC;
