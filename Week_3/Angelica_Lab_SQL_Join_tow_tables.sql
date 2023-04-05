@@ -36,7 +36,8 @@ SELECT fi.title, lan.name
 FROM language AS lan
 INNER JOIN film AS fi
 ON fi.language_id = lan.language_id
-WHERE fi.title REGEXP "^M" AND (fi.language_id = "1" OR fi.language_id = "2");
+WHERE fi.title REGEXP "^M" AND (fi.language_id = "1" OR fi.language_id = "2") # Another way: WHERE f.title LIKE 'M%' AND l.name IN ('english', 'italian') 
+ORDER BY fi.title DESC;
 
 #Query 6: Display the total amount rung up by each staff member in August of 2005.
 SELECT st.first_name, st.last_name, sum(pay.amount) AS total_amount
@@ -49,7 +50,7 @@ GROUP BY st.first_name, st.last_name;
 #Query 7: List each film and the number of actors who are listed for that film.
 SELECT fi.title, count(fa.film_id) AS total_actors
 FROM film AS fi INNER JOIN film_actor AS fa
-ON fi.film_id = fa.film_id
+ON fi.film_id = fa.film_id #Another way: USING (film_id)
 GROUP BY fi.film_id
 ORDER BY total_actors DESC;
 
@@ -57,14 +58,14 @@ ORDER BY total_actors DESC;
 SELECT cu.first_name, cu.last_name, sum(pay.amount) AS total_paid
 FROM customer AS cu INNER JOIN payment AS pay
 ON cu.customer_id = pay.customer_id
-GROUP BY cu.first_name, cu.last_name
+GROUP BY cu.first_name, cu.last_name #Note: group by customer_id - safer
 ORDER BY cu.last_name asc;
 
 #Query 9: Write sql statement to check if you can find any actor who never particiapted in any film.
 SELECT ac.first_name, ac.last_name, fa.film_id
 FROM actor AS ac LEFT JOIN film_actor AS fa
 ON ac.actor_id = fa.actor_id
-WHERE fa.actor_id IS NULL;
+WHERE fa.film_id IS NULL;
 
 #Query 10: get the addresses that have NO customers, and ends with the letter "e"
 SELECT ad.address, cu.customer_id
