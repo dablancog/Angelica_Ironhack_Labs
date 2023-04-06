@@ -61,7 +61,7 @@ WHERE film_id IN (SELECT film_id
 										GROUP BY actor_id
                                         ORDER BY count(film_id) DESC
 										LIMIT 1));
-                                        
+#actor_id of the most prolific actor                                        
 SELECT actor_id, count(film_id)
 FROM film_actor
 GROUP BY actor_id
@@ -84,7 +84,7 @@ WHERE film_id IN (
 														GROUP BY customer_id
 														ORDER BY sum(amount) DESC
 														LIMIT 1)));
-                                                        
+# customer_id of the most profitable actor                                                        
 SELECT customer_id
 FROM payment
 GROUP BY customer_id
@@ -102,4 +102,16 @@ WHERE customer_id IN (
                     HAVING sum(amount) > (SELECT (sum(amount)/count(DISTINCT(customer_id))) AS average_expenditure_per_customer
 											FROM payment))
 ORDER BY first_name, last_name;
-                    
+
+
+
+SELECT customer_id, first_name, last_name
+FROM customer
+WHERE customer_id IN (
+					SELECT customer_id
+                    FROM payment
+                    GROUP BY customer_id
+                    HAVING sum(amount) > (SELECT AVG(total) FROM (SELECT sum(amount) AS total
+																	FROM payment 
+																	GROUP BY customer_id) AS total_customer))
+ORDER BY first_name, last_name;                    
